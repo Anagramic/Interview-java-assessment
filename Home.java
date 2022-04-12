@@ -198,19 +198,20 @@ public class Home {
         Scanner input = new Scanner(System.in);
         System.out.println("\n\n\n" + user.getName() + " Application to " + role.getRoleName());
         Question[] questions = role.getQuestions();
+        Response response = new Response(user);
 
         for (int i = 0; i < questions.length; i++) {
             System.out.println(questions[i].questionText());
             String userResponse = input.nextLine();
-            Response response = new Response(user);
             response.addAnswer(userResponse);
+            role.addResponse(response);
         }
-
+        input.close();
     }
 
     private void saveCollection(JobCollection collection){
         try {
-            File f = new File("Data1.txt");
+            File f = new File(System.getProperty("user.dir")+"Data1.txt");
             FileOutputStream fileOut = new FileOutputStream(f);
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(collection);
@@ -224,7 +225,7 @@ public class Home {
 
     private JobCollection loadCollection(){
         try {
-            File f = new File("Data1.txt");
+            File f = new File(System.getProperty("user.dir")+"Data1.txt");
             FileInputStream fileIn = new FileInputStream(f);
             ObjectInputStream in = new ObjectInputStream(fileIn);
             JobCollection collection = (JobCollection) in.readObject();
@@ -243,7 +244,7 @@ public class Home {
     }
     private void saveAdmins(AdminCollection adminCollection){
         try {
-            File f = new File("Data2.txt");
+            File f = new File(System.getProperty("user.dir")+"Data2.txt");
             FileOutputStream fileOut = new FileOutputStream(f);
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(adminCollection);
@@ -266,6 +267,7 @@ public class Home {
 
         } catch (IOException i) {
             i.printStackTrace();
+            //return new AdminCollection();
 
         } catch (ClassNotFoundException c) {
             System.out.println("Class not found");
